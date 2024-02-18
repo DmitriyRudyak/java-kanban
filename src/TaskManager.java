@@ -2,14 +2,28 @@ import java.util.HashMap;
 
 public class TaskManager {
 	static HashMap<Integer, Task> taskMap = new HashMap<>();
-//	static HashMap<Integer, Subtask> subTaskMap;
 	static HashMap<Integer, Epic> epicMap = new HashMap<>();
 
 	ID_Generator generator = new ID_Generator();
 
 	public Task addTask(Task task) {		//метод для создания базовых задач
-		task.ID = generator.generateID();
-		taskMap.put(task.ID, task);
+		boolean exist = false;
+		if (taskMap.isEmpty()) {
+			task.ID = generator.generateID();
+			taskMap.put(task.ID, task);
+		} else {
+			for (Task value : taskMap.values()) {
+				if (value.equals(task)) {
+					exist = true;
+				}
+			}
+			if (exist) {
+				System.out.println("Ошибка. Такая задача уже записана.");
+			} else {
+				task.ID = generator.generateID();
+				taskMap.put(task.ID, task);
+			}
+		}
 		return task;
 	}
 
@@ -38,8 +52,23 @@ public class TaskManager {
 	}
 
 	public Epic addEpic(Epic epic) {		//метод для создания Эпик задач
-		epic.ID = generator.generateID();
-		epicMap.put(epic.ID, epic);
+		boolean exist = false;
+		if (epicMap.isEmpty()) {
+			epic.ID = generator.generateID();
+			epicMap.put(epic.ID, epic);
+		} else {
+			for (Epic value : epicMap.values()) {
+				if (value.equals(epic)) {
+					exist = true;
+				}
+			}
+			if (exist) {
+				System.out.println("Ошибка. Такая задача уже записана.");
+			} else {
+				epic.ID = generator.generateID();
+				epicMap.put(epic.ID, epic);
+			}
+		}
 		return epic;
 	}
 
@@ -77,8 +106,25 @@ public class TaskManager {
 	}
 
 	public Subtask addSubtask(Subtask subtask, Epic epic) {		//метод для создания подзадач в Эпике
-		epic.addSubtask(subtask);
-		epic.setEpicStatus();
+		boolean exist = false;
+		if (epic.subTaskMap.isEmpty()) {
+			subtask.ID = generator.generateID();
+			epic.addSubtask(subtask);
+			epic.setEpicStatus();
+		} else {
+			for (Subtask value : epic.subTaskMap.values()) {
+				if (value.equals(subtask)) {
+					exist = true;
+				}
+			}
+			if (exist) {
+				System.out.println("Ошибка. Такая задача уже записана.");
+			} else {
+				subtask.ID = generator.generateID();
+				epic.addSubtask(subtask);
+				epic.setEpicStatus();
+			}
+		}
 		return subtask;
 }
 
