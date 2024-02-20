@@ -63,9 +63,9 @@ public class TaskManager {
 	}
 
 	public Task updateEpic(Epic newEpic) {	//метод для обновления Эпик задач
-		ArrayList<Integer> list = epicMap.get(newEpic.getID()).getSubTaskIDList();
-		for (Integer i : list) {
-			newEpic.getSubTaskIDList().add(i);
+		ArrayList<Integer> IDlist = epicMap.get(newEpic.getID()).getSubTaskIDList();
+		for (Integer ID : IDlist) {
+			newEpic.getSubTaskIDList().add(ID);
 		}
 		setEpicStatus(newEpic);
 		epicMap.put(newEpic.getID(), newEpic);
@@ -126,7 +126,11 @@ public class TaskManager {
 		int NEW = 0;
 		int IN_PROGRESS = 0;
 		int DONE = 0;
-		for (Subtask subtask : subtaskMap.values()) {
+		ArrayList<Subtask> subtasksFromEpic = new ArrayList<>();
+		for (Integer ID : epic.getSubTaskIDList()) {
+			subtasksFromEpic.add(subtaskMap.get(ID));
+		}
+		for (Subtask subtask : subtasksFromEpic) {
 			switch (subtask.getStatus()) {
 				case NEW: NEW++;
 					break;
