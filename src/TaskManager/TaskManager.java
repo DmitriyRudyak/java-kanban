@@ -17,9 +17,10 @@ public class TaskManager {
 		return task;
 	}
 
-	public void taskList() {				//метод для получения списка всех базовых задач
+	public ArrayList<Task> taskList() {				//метод для получения списка всех базовых задач
 		ArrayList<Task> taskList = new ArrayList<>(taskMap.values());
 		System.out.println("Список задач " + taskList);
+		return taskList;
 	}
 
 	public void removeTask(int id) {		//метод для удаления базовых задач по идентификатору
@@ -42,13 +43,13 @@ public class TaskManager {
 	public Epic addEpic(Epic epic) {		//метод для создания Эпик задач
 		epic.setID(ID++);
 		epicMap.put(epic.getID(), epic);
-		setEpicStatus(epic);
 		return epic;
 	}
 
-	public void epicList() {				//метод для получения списка всех Эпик задач
-		ArrayList<Task> epicList = new ArrayList<>(epicMap.values());
+	public ArrayList<Epic> epicList() {				//метод для получения списка всех Эпик задач
+		ArrayList<Epic> epicList = new ArrayList<>(epicMap.values());
 		System.out.println("Список эпиков " + epicList);
+		return epicList;
 	}
 
 	public void removeEpic(int id) {		//метод для удаления Эпик задач по идентификатору
@@ -63,10 +64,6 @@ public class TaskManager {
 	}
 
 	public Task updateEpic(Epic newEpic) {	//метод для обновления Эпик задач
-		ArrayList<Integer> IDlist = epicMap.get(newEpic.getID()).getSubTaskIDList();
-		for (Integer ID : IDlist) {
-			newEpic.getSubTaskIDList().add(ID);
-		}
 		setEpicStatus(newEpic);
 		epicMap.put(newEpic.getID(), newEpic);
 		return newEpic;
@@ -80,46 +77,48 @@ public class TaskManager {
 	public Subtask addSubtask(Subtask subtask) {		//метод для создания подзадач в Эпике
 		subtask.setID(ID++);
 		subtaskMap.put(subtask.getID(), subtask);
-		epicMap.get(subtask.getEpicID()).getSubTaskIDList().add(subtask.getID()); //запись subTask ID в Эпик
+		Epic buffer = epicMap.get(subtask.getEpicID());
+		buffer.getSubTaskIDList().add(subtask.getID()); //запись subTask ID в Эпик
 		setEpicStatus(epicMap.get(subtask.getEpicID()));
 		return subtask;
-}
+	}
 
-	public void subtaskList(Epic epic) {						//метод для получения списка подзадач в определенном Эпике
-		ArrayList<Task> subTaskList = new ArrayList<>();
+	public ArrayList<Subtask> subtaskList(Epic epic) {						//метод для получения списка подзадач в определенном Эпике
+		ArrayList<Subtask> subTaskList = new ArrayList<>();
 		for (Integer subTaskID : epic.getSubTaskIDList()) {
 			subTaskList.add(subtaskMap.get(subTaskID));
 		}
 		System.out.println("Список подзадач в " + epic.getName() + subTaskList);
-}
+		return subTaskList;
+	}
 
-	public void subtaskList() {									//метод для получения общего списка подзадач
-		ArrayList<Task> subtaskList = new ArrayList<>(subtaskMap.values());
+	public ArrayList<Subtask> subtaskList() {									//метод для получения общего списка подзадач
+		ArrayList<Subtask> subtaskList = new ArrayList<>(subtaskMap.values());
 		System.out.println("Список подзадач " + subtaskList);
+		return subtaskList;
 	}
 
 	public void removeSubtask(Subtask subtask) {		//метод для удаления подзадач в Эпике
 		epicMap.get(subtask.getEpicID()).getSubTaskIDList().remove(subtask.getID()); //удаление subtask ID из списка в эпике
 		subtaskMap.remove(subtask.getID());
 		setEpicStatus(epicMap.get(subtask.getEpicID()));
-}
+	}
 
-	public Subtask getSubtask(Subtask subtask) {			//метод для получения подзадач из Эпика
-		return subtaskMap.get(subtask.getID());
+	public Subtask getSubtask(int ID) {			//метод для получения подзадач из Эпика
+		return subtaskMap.get(ID);
 }
 
 	public Subtask updateSubtask(Subtask newSubtask) {	//метод для обновления подзадач в Эпике
 		subtaskMap.put(newSubtask.getID(), newSubtask);
 		setEpicStatus(epicMap.get(newSubtask.getEpicID()));
 		return newSubtask;
-}
+	}
 
-	public void deleteSubtaskList(Epic epic) {			//метод для удаления списка всех подзадач в Эпике
-		for (Integer subTaskID : epic.getSubTaskIDList()) {
-			subtaskMap.remove(subTaskID);
-			epic.getSubTaskIDList().remove(subTaskID);
+	public void deleteSubtaskList() {			//метод для удаления списка всех подзадач
+		subtaskMap.clear();
+		for (Epic epic : epicMap.values()) {
+			setEpicStatus(epic);
 		}
-		setEpicStatus(epic);
 	}
 
 	public void setEpicStatus(Epic epic) {
