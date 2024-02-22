@@ -64,7 +64,6 @@ public class TaskManager {
 	}
 
 	public Task updateEpic(Epic newEpic) {	//метод для обновления Эпик задач
-		setEpicStatus(newEpic);
 		epicMap.put(newEpic.getID(), newEpic);
 		return newEpic;
 	}
@@ -117,6 +116,7 @@ public class TaskManager {
 	public void deleteSubtaskList() {			//метод для удаления списка всех подзадач
 		subtaskMap.clear();
 		for (Epic epic : epicMap.values()) {
+			epic.getSubTaskIDList().clear();
 			setEpicStatus(epic);
 		}
 	}
