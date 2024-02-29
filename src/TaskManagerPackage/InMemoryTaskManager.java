@@ -6,11 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
-	HistoryManager historyManager = new InMemoryHistoryManager();
+	private final HistoryManager historyManager;
 	private final HashMap<Integer, Task> taskMap = new HashMap<>();
 	private final HashMap<Integer, Subtask> subtaskMap = new HashMap<>();
 	private final HashMap<Integer, Epic> epicMap = new HashMap<>();
 	private static int ID = 0;
+
+	public InMemoryTaskManager(HistoryManager historyManager) {
+		this.historyManager = historyManager;
+	}
 
 	@Override
 	public Task addTask(Task task) {		//метод для создания базовых задач
