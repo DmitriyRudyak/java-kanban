@@ -3,12 +3,13 @@ import TaskPackage.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
+	HistoryManager historyManager = new InMemoryHistoryManager();
 	private final HashMap<Integer, Task> taskMap = new HashMap<>();
 	private final HashMap<Integer, Subtask> subtaskMap = new HashMap<>();
 	private final HashMap<Integer, Epic> epicMap = new HashMap<>();
-
 	private static int ID = 0;
 
 	@Override
@@ -32,6 +33,7 @@ public class InMemoryTaskManager implements TaskManager {
 
 	@Override
 	public Task getTask(int id) {			//метод для получения базовых задач по идентификатору
+		historyManager.add(taskMap.get(id));
 		return taskMap.get(id);
 	}
 
@@ -70,6 +72,7 @@ public class InMemoryTaskManager implements TaskManager {
 
 	@Override
 	public Task getEpic(int id) {			//метод для получения Эпик задач по идентификатору
+		historyManager.add(epicMap.get(id));
 		return epicMap.get(id);
 	}
 
@@ -120,8 +123,9 @@ public class InMemoryTaskManager implements TaskManager {
 	}
 
 	@Override
-	public Subtask getSubtask(int ID) {			//метод для получения подзадач из Эпика
-		return subtaskMap.get(ID);
+	public Subtask getSubtask(int id) {			//метод для получения подзадач из Эпика
+		historyManager.add(subtaskMap.get(id));
+		return subtaskMap.get(id);
 }
 
 	@Override
@@ -138,6 +142,11 @@ public class InMemoryTaskManager implements TaskManager {
 			epic.getSubTaskIDList().clear();
 			setEpicStatus(epic);
 		}
+	}
+
+	@Override
+	public List<Task> getHistory() {
+		return historyManager.getHistory();
 	}
 
 	@Override

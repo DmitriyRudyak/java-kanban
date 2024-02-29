@@ -1,10 +1,8 @@
 package TaskManager;
-
-import TaskPackage.Epic;
-import TaskPackage.Subtask;
-import TaskPackage.Task;
+import TaskPackage.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface TaskManager {
 	Task addTask(Task task);
@@ -44,6 +42,8 @@ public interface TaskManager {
 	Subtask updateSubtask(Subtask newSubtask);
 
 	void deleteSubtaskList();
+
+	public List<Task> getHistory();
 
 	void setEpicStatus(Epic epic);
 }
