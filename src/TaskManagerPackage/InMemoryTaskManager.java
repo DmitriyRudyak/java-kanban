@@ -3,18 +3,14 @@ import TaskPackage.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedList;
 
 public class InMemoryTaskManager implements TaskManager {
-	private final HistoryManager historyManager;
+	private final HistoryManager historyManager = Managers.getDefaultHistory();
 	private final HashMap<Integer, Task> taskMap = new HashMap<>();
 	private final HashMap<Integer, Subtask> subtaskMap = new HashMap<>();
 	private final HashMap<Integer, Epic> epicMap = new HashMap<>();
 	private static int ID = 0;
-
-	public InMemoryTaskManager(HistoryManager historyManager) {
-		this.historyManager = historyManager;
-	}
 
 	@Override
 	public Task addTask(Task task) {		//метод для создания базовых задач
@@ -149,7 +145,7 @@ public class InMemoryTaskManager implements TaskManager {
 	}
 
 	@Override
-	public List<Task> getHistory() {
+	public LinkedList<Task> getHistory() {
 		return historyManager.getHistory();
 	}
 

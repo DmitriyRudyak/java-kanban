@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 class InMemoryTaskManagerTest {
-	Managers manager = new Managers();
 	@Test
 	void ifTaskIDisSameThenTaskIsSame() {
 		Task sameTask1 = new Task("Task","Task", Status.NEW, 0);
@@ -34,7 +33,7 @@ class InMemoryTaskManagerTest {
 
 	@Test
 	void epicCantBeSubtask() {
-		TaskManager tsk = manager.getDefault();
+		TaskManager tsk = Managers.getDefault();
 		Epic epic = new Epic("Epic");
 		tsk.addEpic(epic);
 		/*tsk.addSubtask(epic);*/		//Программа выдает ошибку несовместимости типов, запрещая данный подход к методу
@@ -42,14 +41,14 @@ class InMemoryTaskManagerTest {
 
 	@Test
 	void subtaskCantBeEpic() {
-		TaskManager tsk = manager.getDefault();
+		TaskManager tsk = Managers.getDefault();
 		Subtask subtask = new Subtask("Subtask", "subtask", Status.NEW, 0);
 		/*tsk.addEpic(subtask);*/		//Программа выдает ошибку несовместимости типов, запрещая данный подход к методу
 	}
 
 	@Test
 	void managersCreatesInitialisedTaskManagerSamples() {
-		TaskManager taskManager = manager.getDefault();
+		TaskManager taskManager = Managers.getDefault();
 
 		Task taskOne = new Task("Task");
 		taskManager.addTask(taskOne);
@@ -63,12 +62,12 @@ class InMemoryTaskManagerTest {
 
 	@Test
 	void managersCreatesInitialisedHistoryManagerSamples() {
-		HistoryManager historyManager = manager.getDefaultHistory();
+		HistoryManager historyManager = Managers.getDefaultHistory();
 	}
 
 	@Test
 	void taskManagerCanWorkWithID() {
-		TaskManager tskManager = manager.getDefault();
+		TaskManager tskManager = Managers.getDefault();
 		Task task = new Task("Task", "Task", Status.NEW);
 		tskManager.addTask(task);
 		int ID = task.getID();
@@ -87,7 +86,7 @@ class InMemoryTaskManagerTest {
 
 	@Test
 	void taskManagerCanWorkWithManualID() {
-		TaskManager tskManager = manager.getDefault();
+		TaskManager tskManager = Managers.getDefault();
 		Task task = new Task("Task", "Task", Status.NEW);
 		tskManager.addTask(task);
 		Task updateTask = new Task("TaskNew", "TaskNew", Status.NEW, 0);
@@ -97,7 +96,7 @@ class InMemoryTaskManagerTest {
 
 	@Test
 	void taskShouldBeUnchangedAfterAddToManager() {
-		TaskManager tskManager = manager.getDefault();
+		TaskManager tskManager = Managers.getDefault();
 		Task task = new Task("Task", "Task", Status.NEW);
 		tskManager.addTask(task);
 		int ID = task.getID();
@@ -115,7 +114,7 @@ class InMemoryTaskManagerTest {
 
 	@Test
 	void taskInHistoryManagerIsUnchanged() {
-		TaskManager tskManager = manager.getDefault();
+		TaskManager tskManager = Managers.getDefault();
 		Task task = new Task("Task", "Task", Status.NEW);
 		tskManager.addTask(task);
 		int ID = task.getID();
@@ -136,7 +135,7 @@ class InMemoryTaskManagerTest {
 
 	@Test
 	void historyListShouldBeSize10() {
-		TaskManager tsk = manager.getDefault();
+		TaskManager tsk = Managers.getDefault();
 		Task task1 = new Task("Task1", "Task", Status.NEW);
 		Task task2 = new Task("Task2", "Task", Status.NEW);
 		Task task3 = new Task("Task3", "Task", Status.NEW);
@@ -179,7 +178,7 @@ class InMemoryTaskManagerTest {
 
 	@Test
 	void historyListShouldChangeContentAfterSize10() {
-		TaskManager tsk = manager.getDefault();
+		TaskManager tsk = Managers.getDefault();
 		Task task1 = new Task("Task1", "Task", Status.NEW);
 		Task task2 = new Task("Task2", "Task", Status.NEW);
 		Task task3 = new Task("Task3", "Task", Status.NEW);
