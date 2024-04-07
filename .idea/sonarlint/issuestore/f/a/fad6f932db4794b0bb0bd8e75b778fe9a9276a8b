@@ -1,0 +1,25 @@
+
+^
+java:S1192"HDefine a constant instead of duplicating this literal "Subtask" 5 times.(—è”Ö
+k	java:S117I"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ß™Ñøùÿÿÿÿ
+k	java:S117f"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ß™Ñøùÿÿÿÿ
+k	java:S117x"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ß™Ñøùÿÿÿÿ
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(‚ª×ùøÿÿÿÿ
+V	java:S125'"<This block of commented-out lines of code should be removed.(®úùûÿÿÿÿ
+P
+java:S1854-";Remove this useless assignment to local variable "subtask".(ä¹V
+R
+java:S1854,"7Remove this useless assignment to local variable "tsk".(ÂÚ‘šÿÿÿÿÿ
+C
+java:S1481,"(Remove this unused "tsk" local variable.(ÂÚ‘šÿÿÿÿÿ
+A
+java:S1481-",Remove this unused "subtask" local variable.(ä¹V
+V	java:S125."<This block of commented-out lines of code should be removed.(Ë…”Ôúÿÿÿÿ
+X
+java:S1854A"BRemove this useless assignment to local variable "historyManager".(‰ØÓÝ
+I
+java:S1481A"3Remove this unused "historyManager" local variable.(‰ØÓÝ
+R
+java:S1128"<Remove this unused import 'org.junit.jupiter.api.BeforeAll'.(—¦¹î
+F
+java:S5960"+Remove this assertion from production code.(Þ×ÑÃúÿÿÿÿ
