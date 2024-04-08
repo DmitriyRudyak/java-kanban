@@ -11,7 +11,3 @@ b
 2src/TaskManagerPackage/InMemoryHistoryManager.java,3\0\3030aae161bad53019031822c65f230a6ec6dc10
 =
 src/Main.java,9\2\924f089edb4af5ee45c8a9d1129cd28e2b368138
-1
-q,2\2\22ea1c649c82946aa6e479e1ffd321e4a318b1b0
-4
-stop,1\b\1b480158e1f30e0b6cee7813e9ecf094bd6b3745
