@@ -1,0 +1,17 @@
+
+„
+java:S1192"HDefine a constant instead of duplicating this literal "Subtask" 5 times.(—è”ÖJ$97cb5c61-0bd2-4f2a-8c9a-519ab5fdc09b
+|	java:S125&"<This block of commented-out lines of code should be removed.(®úùûÿÿÿÿJ$8daefb32-7eeb-473a-bec2-666581bc96a7
+v
+java:S1854,";Remove this useless assignment to local variable "subtask".(ä¹VJ$9ebec1a3-bb7f-4003-ba70-5d7e45fd88c4
+x
+java:S1854+"7Remove this useless assignment to local variable "tsk".(ÂÚ‘šÿÿÿÿÿJ$bce15b3a-412b-440f-9b8d-0818a8c525b7
+i
+java:S1481+"(Remove this unused "tsk" local variable.(ÂÚ‘šÿÿÿÿÿJ$d988f7cf-7f04-4d38-8358-56d1b47a3df2
+g
+java:S1481,",Remove this unused "subtask" local variable.(ä¹VJ$dbf316c1-7480-4d68-ac2f-9dbbafe65b4d
+|	java:S125-"<This block of commented-out lines of code should be removed.(Ë…”ÔúÿÿÿÿJ$4a4fbefd-ac2d-48ef-a539-86c3e2830f86
+~
+java:S1854@"BRemove this useless assignment to local variable "historyManager".(‰ØÓÝJ$8cb80e34-5982-4baf-a33d-e1a8cf1f1b3e
+o
+java:S1481@"3Remove this unused "historyManager" local variable.(‰ØÓÝJ$089c8051-7b77-4ba5-bfc5-52cc75da4463
