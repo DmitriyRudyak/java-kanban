@@ -1,5 +1,3 @@
-package taskmanager.test;
-
 import taskmanager.*;
 import taskpackage.*;
 import org.junit.jupiter.api.Assertions;
@@ -57,11 +55,6 @@ class InMemoryTaskManagerTest {
 		historyManual.add(taskOne);
 
 		Assertions.assertEquals(history, historyManual);
-	}
-
-	@Test
-	void managersCreatesInitialisedHistoryManagerSamples() {
-		HistoryManager historyManager = Managers.getDefaultHistory();
 	}
 
 	@Test
