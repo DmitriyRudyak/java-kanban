@@ -24,7 +24,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 		return historyList.getTasks();
 	}
 
-	private static class CustomLinkedList {		//
+	private static class CustomLinkedList {
 
 		private static class Node<T> {			//класс-узел для создания коллекции
 			private T task;
