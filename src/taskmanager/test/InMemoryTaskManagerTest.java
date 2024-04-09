@@ -133,87 +133,57 @@ class InMemoryTaskManagerTest {
 	}
 
 	@Test
-	void historyListShouldBeSize10() {
-		TaskManager tsk = Managers.getDefault();
-		Task task1 = new Task("Task1", "Task", Status.NEW);
-		Task task2 = new Task("Task2", "Task", Status.NEW);
-		Task task3 = new Task("Task3", "Task", Status.NEW);
-		Task task4 = new Task("Task4", "Task", Status.NEW);
-		Task task5 = new Task("Task5", "Task", Status.NEW);
-		Task task6 = new Task("Task6", "Task", Status.NEW);
-		Task task7 = new Task("Task7", "Task", Status.NEW);
-		Task task8 = new Task("Task8", "Task", Status.NEW);
-		Task task9 = new Task("Task9", "Task", Status.NEW);
-		Task task10 = new Task("Task10", "Task", Status.NEW);
-		Task task11 = new Task("Task11", "Task", Status.NEW);
-		tsk.addTask(task1);
-		tsk.addTask(task2);
-		tsk.addTask(task3);
-		tsk.addTask(task4);
-		tsk.addTask(task5);
-		tsk.addTask(task6);
-		tsk.addTask(task7);
-		tsk.addTask(task8);
-		tsk.addTask(task9);
-		tsk.addTask(task10);
-		tsk.addTask(task11);
-		tsk.getTask(0);
-		tsk.getTask(1);
-		tsk.getTask(2);
-		tsk.getTask(3);
-		tsk.getTask(4);
-		tsk.getTask(5);
-		tsk.getTask(6);
-		tsk.getTask(7);
-		tsk.getTask(8);
-		tsk.getHistory();
-		tsk.getTask(9);
-		tsk.getHistory();
-		tsk.getTask(10);
-		tsk.getHistory();
-		int size = 10;
-		Assertions.assertEquals(tsk.getHistory().size(), size);
+	void taskShouldBeAddedToHistory() {
+		TaskManager tskManager = Managers.getDefault();
+		Task task = new Task("Task", "Task", Status.NEW);
+		tskManager.addTask(task);
+		int id = task.getId();
+		tskManager.getTask(id);
+
+		tskManager.getTask(id);
+
+		Assertions.assertEquals(tskManager.getHistory().size(), 1);
 	}
 
 	@Test
-	void historyListShouldChangeContentAfterSize10() {
-		TaskManager tsk = Managers.getDefault();
-		Task task1 = new Task("Task1", "Task", Status.NEW);
-		Task task2 = new Task("Task2", "Task", Status.NEW);
-		Task task3 = new Task("Task3", "Task", Status.NEW);
-		Task task4 = new Task("Task4", "Task", Status.NEW);
-		Task task5 = new Task("Task5", "Task", Status.NEW);
-		Task task6 = new Task("Task6", "Task", Status.NEW);
-		Task task7 = new Task("Task7", "Task", Status.NEW);
-		Task task8 = new Task("Task8", "Task", Status.NEW);
-		Task task9 = new Task("Task9", "Task", Status.NEW);
-		Task task10 = new Task("Task10", "Task", Status.NEW);
-		Task task11 = new Task("Task11", "Task", Status.NEW);
-		tsk.addTask(task1);
-		tsk.addTask(task2);
-		tsk.addTask(task3);
-		tsk.addTask(task4);
-		tsk.addTask(task5);
-		tsk.addTask(task6);
-		tsk.addTask(task7);
-		tsk.addTask(task8);
-		tsk.addTask(task9);
-		tsk.addTask(task10);
-		tsk.addTask(task11);
-		tsk.getTask(0);
-		tsk.getTask(1);
-		tsk.getTask(2);
-		tsk.getTask(3);
-		tsk.getTask(4);
-		tsk.getTask(5);
-		tsk.getTask(6);
-		tsk.getTask(7);
-		tsk.getTask(8);
-		tsk.getHistory();
-		tsk.getTask(9);
-		tsk.getHistory();
-		tsk.getTask(10);
-		tsk.getHistory();
-		Assertions.assertNotEquals(task1, tsk.getHistory().get(0));
+	void taskShouldBeDeletedFromHistory() {
+		TaskManager tskManager = Managers.getDefault();
+		Task task = new Task("Task", "Task", Status.NEW);
+		tskManager.addTask(task);
+		int id = task.getId();
+		tskManager.getTask(id);
+
+		tskManager.getTask(id);
+		tskManager.removeTask(id);
+
+		Assertions.assertEquals(tskManager.getHistory().size(), 0);
+	}
+
+	@Test
+	void deletedSubTasksShouldNotHaveID() {
+		TaskManager tskManager = Managers.getDefault();
+		Epic epic = new Epic("Epic", 0);
+		Subtask subtask = new Subtask("Subtask", "...", Status.NEW, 0);
+		tskManager.addEpic(epic);
+
+		tskManager.addSubtask(subtask);
+		tskManager.removeSubtask(subtask);
+
+		Assertions.assertEquals(epic.getSubTaskIDList().size(), 0);
+	}
+
+	@Test
+	void setterChangesAllContent() {
+		TaskManager tskManager = Managers.getDefault();
+		Epic epic = new Epic("Epic");
+		tskManager.addEpic(epic);
+		Subtask subtaskOne = new Subtask("Subtask", "...", Status.NEW, epic.getId());
+		tskManager.addSubtask(subtaskOne);
+
+		Assertions.assertEquals(epic.getStatus(), Status.NEW);
+
+		subtaskOne.setStatus(Status.DONE);
+		tskManager.setEpicStatus(epic);
+		Assertions.assertEquals(epic.getStatus(), Status.DONE);
 	}
 }

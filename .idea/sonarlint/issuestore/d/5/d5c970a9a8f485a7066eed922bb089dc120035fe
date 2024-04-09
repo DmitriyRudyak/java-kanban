@@ -1,15 +1,0 @@
-
-’	java:S117š"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(™ØŸòùÿÿÿÿJ$f3a8be98-d5fd-40d7-88ce-3ab194c7343b
-	java:S117›"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ÈåÒJ$97be6906-cc08-46fc-a04e-8d4527f98216
-Œ	java:S117œ"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(‚ø”HJ$283959ed-ce4b-4ff1-9d17-b22e2da800f4
-•	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ğú¯¿J$adf36b57-806c-487e-8df1-f108272919e6
-
-java:S3008"MRename this field "ID" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(å ¡²şÿÿÿÿJ$744ee8c5-9cc3-4484-98fb-88210a0a1a3d
-r
-java:S2696"6Make the enclosing method "static" or remove this set.(œ£¸½J$5d853f5e-a871-4a2a-aa02-9a40a641b562
-r
-java:S26965"6Make the enclosing method "static" or remove this set.(ÕÏ½ÌJ$e03e8aef-e5e5-41fa-9373-c1512e098410
-~
-java:S2696]"6Make the enclosing method "static" or remove this set.(äÊ…õúÿÿÿÿ8Å·Îìë1J$8166abeb-3b53-4735-9f50-12fb11f53d54
-x
-java:S1117"6Rename "ID" which hides the field declared at line 13.(¿ùŒûÿÿÿÿÿJ$491a4ea0-3039-43ec-8fbd-d22e3f8c2319

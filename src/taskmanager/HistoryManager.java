@@ -1,12 +1,12 @@
 package taskmanager;
 import taskpackage.*;
 
-import java.util.LinkedList;
+import java.util.List;
 
 public interface HistoryManager {
 	void add(Task task);
 
 	void remove(int id);
 
-	LinkedList<Task> getHistory();
+	List<Task> getHistoryList();
 }
