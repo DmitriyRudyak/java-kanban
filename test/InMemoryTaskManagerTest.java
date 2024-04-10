@@ -156,8 +156,8 @@ class InMemoryTaskManagerTest {
 	void deletedSubTasksShouldNotHaveID() {
 		TaskManager tskManager = Managers.getDefault();
 		Epic epic = new Epic("Epic", 0);
-		Subtask subtask = new Subtask("Subtask", "...", Status.NEW, 0);
 		tskManager.addEpic(epic);
+		Subtask subtask = new Subtask("Subtask", "...", Status.NEW, epic.getId());
 
 		tskManager.addSubtask(subtask);
 		tskManager.removeSubtask(subtask);
@@ -178,5 +178,94 @@ class InMemoryTaskManagerTest {
 		subtaskOne.setStatus(Status.DONE);
 		tskManager.setEpicStatus(epic);
 		Assertions.assertEquals(epic.getStatus(), Status.DONE);
+	}
+
+	@Test
+	void historyNodeShouldBeDeletedFromBegining() {
+		TaskManager taskManager = Managers.getDefault();
+		Task taskOne = new Task("First", "...", Status.NEW);
+		Task taskTwo = new Task("Second", "...", Status.IN_PROGRESS);
+		Task taskThree = new Task("Third", "...", Status.NEW);
+		Task taskFour = new Task("Fourth", "...", Status.NEW);
+		taskManager.addTask(taskOne);
+		taskManager.addTask(taskTwo);
+		taskManager.addTask(taskThree);
+		taskManager.addTask(taskFour);
+		taskManager.getTask(taskOne.getId());
+		taskManager.getTask(taskTwo.getId());
+		taskManager.getTask(taskThree.getId());
+		taskManager.getTask(taskFour.getId());
+
+		Assertions.assertEquals(taskManager.getHistory().get(0), taskOne);
+		taskManager.removeTask(taskOne.getId());
+
+		Assertions.assertNotEquals(taskManager.getHistory().get(0), taskOne);
+	}
+
+	@Test
+	void historyNodeShouldBeDeletedFromMiddle() {
+		TaskManager taskManager = Managers.getDefault();
+		Task taskOne = new Task("First", "...", Status.NEW);
+		Task taskTwo = new Task("Second", "...", Status.IN_PROGRESS);
+		Task taskThree = new Task("Third", "...", Status.NEW);
+		Task taskFour = new Task("Fourth", "...", Status.NEW);
+		taskManager.addTask(taskOne);
+		taskManager.addTask(taskTwo);
+		taskManager.addTask(taskThree);
+		taskManager.addTask(taskFour);
+		taskManager.getTask(taskOne.getId());
+		taskManager.getTask(taskTwo.getId());
+		taskManager.getTask(taskThree.getId());
+		taskManager.getTask(taskFour.getId());
+
+		Assertions.assertEquals(taskManager.getHistory().get(2), taskThree);
+		taskManager.removeTask(taskThree.getId());
+
+		Assertions.assertNotEquals(taskManager.getHistory().get(2), taskThree);
+	}
+
+	@Test
+	void historyNodeShouldBeDeletedFromEnd() {
+		TaskManager taskManager = Managers.getDefault();
+		Task taskOne = new Task("First", "...", Status.NEW);
+		Task taskTwo = new Task("Second", "...", Status.IN_PROGRESS);
+		Task taskThree = new Task("Third", "...", Status.NEW);
+		Task taskFour = new Task("Fourth", "...", Status.NEW);
+		taskManager.addTask(taskOne);
+		taskManager.addTask(taskTwo);
+		taskManager.addTask(taskThree);
+		taskManager.addTask(taskFour);
+		taskManager.getTask(taskOne.getId());
+		taskManager.getTask(taskTwo.getId());
+		taskManager.getTask(taskThree.getId());
+		taskManager.getTask(taskFour.getId());
+
+		Assertions.assertEquals(taskManager.getHistory().get(3), taskFour);
+		taskManager.removeTask(taskOne.getId());
+
+//		Assertions.assertNull(taskManager.getHistory().get(3));		//IndexOutOfBoundsException
+	}
+
+	@Test
+	void historyNodeShouldBeRenewed() {
+		TaskManager taskManager = Managers.getDefault();
+		Task taskOne = new Task("First", "...", Status.NEW);
+		Task taskTwo = new Task("Second", "...", Status.IN_PROGRESS);
+		Task taskThree = new Task("Third", "...", Status.NEW);
+		Task taskFour = new Task("Fourth", "...", Status.NEW);
+		taskManager.addTask(taskOne);
+		taskManager.addTask(taskTwo);
+		taskManager.addTask(taskThree);
+		taskManager.addTask(taskFour);
+		taskManager.getTask(taskOne.getId());
+		taskManager.getTask(taskTwo.getId());
+		taskManager.getTask(taskThree.getId());
+		taskManager.getTask(taskFour.getId());
+
+		Assertions.assertEquals(taskManager.getHistory().get(1), taskTwo);
+
+		taskManager.getTask(taskTwo.getId());
+		Assertions.assertNotEquals(taskManager.getHistory().get(1), taskTwo);
+		Assertions.assertEquals(taskManager.getHistory().get(3), taskTwo);
 	}
 }
