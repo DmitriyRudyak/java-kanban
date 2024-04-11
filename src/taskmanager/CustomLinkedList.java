@@ -8,24 +8,24 @@ import java.util.Map;
 
 public class CustomLinkedList {
 
-	static class Node<T> {			//класс-узел для создания коллекции
-		T task;
-		Node<T> next;
-		Node<T> prev;
+	private static class Node<T> {			//класс-узел для создания коллекции
+		private T task;
+		private Node<T> next;
+		private Node<T> prev;
 
-		public Node(Node<T> prev, T task, Node<T> next) {
+		Node(Node<T> prev, T task, Node<T> next) {
 			this.task = task;
 			this.next = next;
 			this.prev = prev;
 		}
 	}
 
-	Node<Task> head;
-	Node<Task> tail;
+	private Node<Task> head;
+	private Node<Task> tail;
 
-	final Map<Integer, Node<Task>> idToNodeMap = new HashMap<>();	//мапа, хранящая пару: номер id таска - узел
+	private final Map<Integer, Node<Task>> idToNodeMap = new HashMap<>();	//мапа, хранящая пару: номер id таска - узел
 
-	void linkLast(Task task) {				//метод добавляет задачу в конец списка и удаляет ее предыдущий просмотр
+	public void linkLast(Task task) {				//метод добавляет задачу в конец списка и удаляет ее предыдущий просмотр
 		if (idToNodeMap.containsKey(task.getId())) {
 			removeNode(idToNodeMap.get(task.getId()));
 		}
@@ -40,13 +40,13 @@ public class CustomLinkedList {
 		idToNodeMap.put(task.getId(), newNode);
 	}
 
-	void removeNode(int id) {				//метод принимает id задачи на удаление и передает соответствующий узел в сл метод по удалению
+	public void removeNode(int id) {				//метод принимает id задачи на удаление и передает соответствующий узел в сл метод по удалению
 		if (idToNodeMap.containsKey(id)) {
 			removeNode(idToNodeMap.get(id));
 		}
 	}
 
-	void removeNode(Node<Task> node) {		//метод удаляет из мапы узел с уже просмотренной и добавляемой вновь задачей
+	public void removeNode(Node<Task> node) {		//метод удаляет из мапы узел с уже просмотренной и добавляемой вновь задачей
 		final Node<Task> prev = node.prev;
 		final Node<Task> next = node.next;
 		if (prev == null) {
@@ -64,7 +64,7 @@ public class CustomLinkedList {
 		node.task = null;
 	}
 
-	List<Task> getTasks() {					//метод формирует список задач для просмотра истории
+	public List<Task> getTasks() {					//метод формирует список задач для просмотра истории
 		List<Task> tasks = new ArrayList<>();
 		for (Node<Task> node = head; node != null; node = node.next) {
 			tasks.add(node.task);
