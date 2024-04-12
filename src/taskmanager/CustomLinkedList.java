@@ -9,9 +9,9 @@ import java.util.Map;
 public class CustomLinkedList {
 
 	private static class Node<T> {			//класс-узел для создания коллекции
-		private T task;
-		private Node<T> next;
-		private Node<T> prev;
+		T task;
+		Node<T> next;
+		Node<T> prev;
 
 		Node(Node<T> prev, T task, Node<T> next) {
 			this.task = task;
