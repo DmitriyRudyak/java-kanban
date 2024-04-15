@@ -21,11 +21,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 			writer.newLine();
 			historyToString(writer);	//запись истории в файл
 		} catch (IOException e) {
-			try {
-				throw new ManagerSaveException(e);
-			} catch (ManagerSaveException ex) {
-				throw new RuntimeException(ex);
-			}
+			throw new ManagerSaveException();
 		}
 	}
 
@@ -34,7 +30,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 		Map<Integer, Task> fileHistory = new HashMap<>();
 		List<Integer> idsHistory = new ArrayList<>();
 		try {
-			String taskLines = Files.readString(file.toPath()); //считывание файла и запись в список построчно
+			String taskLines = Files.readString(file.toPath());	//считывание файла и запись в список построчно
 			List<String> taskLineMass = List.of(taskLines.split("\r\n"));
 			for (int i = 1; i < taskLineMass.size(); i++) {		//если строка пустая, и следующая строка не пустая, формируется список с идентификаторами истории
 				if (taskLineMass.get(i).isEmpty() && !taskLineMass.get(i + 1).isEmpty()) {
@@ -65,11 +61,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 				fileManager.historyManager.add(fileHistory.get(id));
 			}
 		} catch (IOException e) {
-			try {
-				throw new ManagerSaveException(e);
-			} catch (ManagerSaveException ex) {
-				throw new RuntimeException(ex);
-			}
+			throw new ManagerSaveException();
 		}
 		return fileManager;
 	}
