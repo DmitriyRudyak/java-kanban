@@ -1,9 +1,0 @@
-id,type,name,status,description,epic
-0,TASK,First,NEW,Description
-1,TASK,Second,IN_PROGRESS,Description
-2,EPIC,Epic,IN_PROGRESS,null
-3,EPIC,EpicEmpty,DONE,null
-4,SUB_TASK,SubOne,NEW,Description,2
-5,SUB_TASK,SubTwo,IN_PROGRESS,Description,2
-6,SUB_TASK,SubThree,DONE,Description,3
-7,SUB_TASK,SubFour,DONE,Description,3

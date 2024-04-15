@@ -3,6 +3,7 @@ import taskpackage.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -181,7 +182,7 @@ class InMemoryTaskManagerTest {
 	}
 
 	@Test
-	void historyNodeShouldBeDeletedFromBegining() {
+	void historyNodeShouldBeDeletedFromBeginning() {
 		TaskManager taskManager = Managers.getDefault();
 		Task taskOne = new Task("First", "...", Status.NEW);
 		Task taskTwo = new Task("Second", "...", Status.IN_PROGRESS);
@@ -267,5 +268,63 @@ class InMemoryTaskManagerTest {
 		taskManager.getTask(taskTwo.getId());
 		Assertions.assertNotEquals(taskManager.getHistory().get(1), taskTwo);
 		Assertions.assertEquals(taskManager.getHistory().get(3), taskTwo);
+	}
+
+	@Test
+	void shouldSaveAndLoadEmptyFile() {
+		FileBackedTaskManager taskManager = Managers.getDefaultFbManager();
+		File taskStorage = new File("resources/taskStorage.csv");
+
+		Task taskOne = new Task("First", "...", Status.NEW);
+		taskManager.addTask(taskOne);
+		taskManager.removeTask(taskOne.getId());
+		FileBackedTaskManager taskManagerSecond = FileBackedTaskManager.loadFromFile(taskStorage);
+
+		Assertions.assertEquals(0, taskManagerSecond.taskList().size());
+
+		taskStorage.deleteOnExit();
+	}
+
+	@Test
+	void shouldSaveAndLoadFileWithData() {
+		FileBackedTaskManager taskManager = Managers.getDefaultFbManager();
+		File taskStorage = new File("resources/taskStorage.csv");
+
+		Task taskOne = new Task("First", "...", Status.NEW);
+		Task taskTwo = new Task("Second", "...", Status.IN_PROGRESS);
+		Task taskThree = new Task("Third", "...", Status.NEW);
+		Task taskFour = new Task("Fourth", "...", Status.NEW);
+		taskManager.addTask(taskOne);
+		taskManager.addTask(taskTwo);
+		taskManager.addTask(taskThree);
+		taskManager.addTask(taskFour);
+		FileBackedTaskManager taskManagerSecond = FileBackedTaskManager.loadFromFile(taskStorage);
+
+		Assertions.assertEquals(4, taskManagerSecond.taskList().size());
+
+		taskStorage.deleteOnExit();
+	}
+
+	@Test
+	void shouldSaveAndLoadHistoryFromFile() {
+		FileBackedTaskManager taskManager = Managers.getDefaultFbManager();
+		File taskStorage = new File("resources/taskStorage.csv");
+
+		Task taskOne = new Task("First", "...", Status.NEW);
+		Task taskTwo = new Task("Second", "...", Status.IN_PROGRESS);
+		Task taskThree = new Task("Third", "...", Status.NEW);
+		Task taskFour = new Task("Fourth", "...", Status.NEW);
+		taskManager.addTask(taskOne);
+		taskManager.addTask(taskTwo);
+		taskManager.addTask(taskThree);
+		taskManager.addTask(taskFour);
+		taskManager.getTask(taskOne.getId());
+		taskManager.getTask(taskFour.getId());
+
+		FileBackedTaskManager taskManagerSecond = FileBackedTaskManager.loadFromFile(taskStorage);
+
+		Assertions.assertEquals(2, taskManagerSecond.getHistory().size());
+
+		taskStorage.deleteOnExit();
 	}
 }
