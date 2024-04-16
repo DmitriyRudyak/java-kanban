@@ -8,8 +8,8 @@ import java.io.File;
 class FileBackedTaskManagerTest {
 	@Test
 	void shouldSaveAndLoadEmptyFile() {
-		File taskStorage = new File("./test/resources/storage.csv");
-		FileBackedTaskManager taskManager = new  FileBackedTaskManager("./test/resources/storage.csv");
+		File taskStorage = new File("./test/resources/storageEmpty.csv");
+		FileBackedTaskManager taskManager = new  FileBackedTaskManager("./test/resources/storageEmpty.csv");
 
 		Task taskOne = new Task("First", "...", Status.NEW);
 		taskManager.addTask(taskOne);
@@ -21,8 +21,8 @@ class FileBackedTaskManagerTest {
 
 	@Test
 	void shouldSaveAndLoadFileWithData() {
-		FileBackedTaskManager taskManager = new  FileBackedTaskManager("./test/resources/storage.csv");
 		File taskStorage = new File("./test/resources/storage.csv");
+		FileBackedTaskManager taskManager = new  FileBackedTaskManager("./test/resources/storage.csv");
 
 		Task taskOne = new Task("First", "...", Status.NEW);
 		Task taskTwo = new Task("Second", "...", Status.IN_PROGRESS);
@@ -39,8 +39,9 @@ class FileBackedTaskManagerTest {
 
 	@Test
 	void shouldSaveAndLoadHistoryFromFile() {
-		FileBackedTaskManager taskManager = new  FileBackedTaskManager("./test/resources/storage.csv");
 		File taskStorage = new File("./test/resources/storage.csv");
+		FileBackedTaskManager taskManager = new  FileBackedTaskManager("./test/resources/storage.csv");
+
 
 		Task taskOne = new Task("First", "...", Status.NEW);
 		Task taskTwo = new Task("Second", "...", Status.IN_PROGRESS);
