@@ -11,7 +11,15 @@ import java.util.List;
 import java.util.Map;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
-	private final File taskStorage = new File("resources/taskStorage.csv");
+	private final File taskStorage;
+
+	public FileBackedTaskManager() {
+		taskStorage = new File("./resources/taskStorage.csv");
+	}
+
+	public FileBackedTaskManager(String path) {
+		taskStorage = new File(path);
+	}
 
 	private void save() {		//метод для записи задач в файл. Так же записывает историю в отдельный файл.
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(taskStorage, StandardCharsets.UTF_8))) {
@@ -273,7 +281,5 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 		System.out.println(managerNew.getHistory());
 
 		System.out.println(managerNew.taskMap);
-
-		taskStorage.deleteOnExit();
 	}
 }

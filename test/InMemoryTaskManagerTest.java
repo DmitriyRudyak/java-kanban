@@ -272,8 +272,8 @@ class InMemoryTaskManagerTest {
 
 	@Test
 	void shouldSaveAndLoadEmptyFile() {
-		FileBackedTaskManager taskManager = Managers.getDefaultFbManager();
-		File taskStorage = new File("resources/taskStorage.csv");
+		File taskStorage = new File("./test/resources/storage.csv");
+		FileBackedTaskManager taskManager = new  FileBackedTaskManager("./test/resources/storage.csv");
 
 		Task taskOne = new Task("First", "...", Status.NEW);
 		taskManager.addTask(taskOne);
@@ -282,13 +282,13 @@ class InMemoryTaskManagerTest {
 
 		Assertions.assertEquals(0, taskManagerSecond.taskList().size());
 
-		taskStorage.deleteOnExit();
+//		taskStorage.deleteOnExit();
 	}
 
 	@Test
 	void shouldSaveAndLoadFileWithData() {
-		FileBackedTaskManager taskManager = Managers.getDefaultFbManager();
-		File taskStorage = new File("resources/taskStorage.csv");
+		FileBackedTaskManager taskManager = new  FileBackedTaskManager("./test/resources/storage.csv");
+		File taskStorage = new File("./test/resources/storage.csv");
 
 		Task taskOne = new Task("First", "...", Status.NEW);
 		Task taskTwo = new Task("Second", "...", Status.IN_PROGRESS);
@@ -302,13 +302,13 @@ class InMemoryTaskManagerTest {
 
 		Assertions.assertEquals(4, taskManagerSecond.taskList().size());
 
-		taskStorage.deleteOnExit();
+//		taskStorage.deleteOnExit();
 	}
 
 	@Test
 	void shouldSaveAndLoadHistoryFromFile() {
-		FileBackedTaskManager taskManager = Managers.getDefaultFbManager();
-		File taskStorage = new File("resources/taskStorage.csv");
+		FileBackedTaskManager taskManager = new  FileBackedTaskManager("./test/resources/storage.csv");
+		File taskStorage = new File("./test/resources/storage.csv");
 
 		Task taskOne = new Task("First", "...", Status.NEW);
 		Task taskTwo = new Task("Second", "...", Status.IN_PROGRESS);
@@ -324,7 +324,5 @@ class InMemoryTaskManagerTest {
 		FileBackedTaskManager taskManagerSecond = FileBackedTaskManager.loadFromFile(taskStorage);
 
 		Assertions.assertEquals(2, taskManagerSecond.getHistory().size());
-
-		taskStorage.deleteOnExit();
 	}
 }
