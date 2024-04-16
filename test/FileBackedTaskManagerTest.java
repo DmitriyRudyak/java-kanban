@@ -9,7 +9,7 @@ import java.io.IOException;
 class FileBackedTaskManagerTest {
 	@Test
 	void shouldSaveAndLoadEmptyFile() throws IOException {
-		File taskStorage = File.createTempFile("storageEmpty", ".csv", new File("./test/resources/"));
+		File taskStorage = File.createTempFile("storageEmpty", ".csv", new File("./test/resources"));
 		FileBackedTaskManager taskManager = new  FileBackedTaskManager(taskStorage.getPath());
 
 		Task taskOne = new Task("First", "...", Status.NEW);
@@ -24,7 +24,7 @@ class FileBackedTaskManagerTest {
 
 	@Test
 	void shouldSaveAndLoadFileWithData() throws IOException {
-		File taskStorage = File.createTempFile("storageEmpty", ".csv", new File("./test/resources/"));
+		File taskStorage = File.createTempFile("storageEmpty", ".csv", new File("./test/resources"));
 		FileBackedTaskManager taskManager = new  FileBackedTaskManager(taskStorage.getPath());
 
 		Task taskOne = new Task("First", "...", Status.NEW);
@@ -43,7 +43,7 @@ class FileBackedTaskManagerTest {
 
 	@Test
 	void shouldSaveAndLoadHistoryFromFile() throws IOException {
-		File taskStorage = File.createTempFile("storageEmpty", ".csv");
+		File taskStorage = File.createTempFile("storageEmpty", ".csv", new File("./test/resources"));
 		FileBackedTaskManager taskManager = new  FileBackedTaskManager(taskStorage.getPath());
 
 
