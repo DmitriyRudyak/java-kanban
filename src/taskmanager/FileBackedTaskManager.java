@@ -34,6 +34,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 	}
 
 	public static FileBackedTaskManager loadFromFile(File file) {	//метод для загрузки данных и истории изи файла
+		System.out.println("Загрузка из файла " + file);
 		FileBackedTaskManager fileManager = new FileBackedTaskManager();
 		Map<Integer, Task> fileHistory = new HashMap<>();
 		List<Integer> idsHistory = new ArrayList<>();
