@@ -23,10 +23,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
 	private void save() {		//метод для записи задач в файл. Так же записывает историю в отдельный файл.
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(taskStorage, StandardCharsets.UTF_8))) {
-			writer.write("id,type,name,status,description,epic");
-			writer.newLine();
+			writer.write("id,type,name,status,description,epic\n");
 			saveTasksToFile(writer);	//запись задач в файл
-			writer.newLine();
+			writer.write("\n");
 			historyToString(writer);	//запись истории в файл
 		} catch (IOException e) {
 			throw new ManagerSaveException();
@@ -40,7 +39,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 		List<Integer> idsHistory = new ArrayList<>();
 		try {
 			String taskLines = Files.readString(file.toPath());	//считывание файла и запись в список построчно
-			List<String> taskLineMass = List.of(taskLines.split("\r\n"));
+			List<String> taskLineMass = List.of(taskLines.split("\n"));
 			for (int i = 1; i < taskLineMass.size(); i++) {		//если строка пустая, и следующая строка не пустая, формируется список с идентификаторами истории
 				if (taskLineMass.get(i).isEmpty() && !taskLineMass.get(i + 1).isEmpty()) {
 				idsHistory = historyFromString(taskLineMass.get(i + 1));
@@ -77,16 +76,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
 	private void saveTasksToFile(BufferedWriter writer) throws IOException {	//вспомогательный метод для записи задач в файл
 		for (Task task : taskList()) {
-			writer.write(toString(task));
-			writer.newLine();
+			writer.write(toString(task)+"\n");
 		}
 		for (Epic epic : epicList()) {
-			writer.write(toString(epic));
-			writer.newLine();
+			writer.write(toString(epic)+"\n");
 		}
 		for (Subtask subtask : subtaskList()) {
-			writer.write(toString(subtask));
-			writer.newLine();
+			writer.write(toString(subtask)+"\n");
 		}
 	}
 
