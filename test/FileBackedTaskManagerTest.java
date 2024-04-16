@@ -4,12 +4,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.IOException;
 
 class FileBackedTaskManagerTest {
 	@Test
-	void shouldSaveAndLoadEmptyFile() {
-		File taskStorage = new File("./test/resources/storageEmpty.csv");
-		FileBackedTaskManager taskManager = new  FileBackedTaskManager("./test/resources/storageEmpty.csv");
+	void shouldSaveAndLoadEmptyFile() throws IOException {
+		File taskStorage = File.createTempFile("storageEmpty", ".csv", new File("./test/resources/"));
+		FileBackedTaskManager taskManager = new  FileBackedTaskManager(taskStorage.getPath());
 
 		Task taskOne = new Task("First", "...", Status.NEW);
 		taskManager.addTask(taskOne);
@@ -17,12 +18,14 @@ class FileBackedTaskManagerTest {
 		FileBackedTaskManager taskManagerSecond = FileBackedTaskManager.loadFromFile(taskStorage);
 
 		Assertions.assertEquals(0, taskManagerSecond.taskList().size());
+
+		taskStorage.deleteOnExit();
 	}
 
 	@Test
-	void shouldSaveAndLoadFileWithData() {
-		File taskStorage = new File("./test/resources/storage.csv");
-		FileBackedTaskManager taskManager = new  FileBackedTaskManager("./test/resources/storage.csv");
+	void shouldSaveAndLoadFileWithData() throws IOException {
+		File taskStorage = File.createTempFile("storageEmpty", ".csv", new File("./test/resources/"));
+		FileBackedTaskManager taskManager = new  FileBackedTaskManager(taskStorage.getPath());
 
 		Task taskOne = new Task("First", "...", Status.NEW);
 		Task taskTwo = new Task("Second", "...", Status.IN_PROGRESS);
@@ -35,12 +38,13 @@ class FileBackedTaskManagerTest {
 		FileBackedTaskManager taskManagerSecond = FileBackedTaskManager.loadFromFile(taskStorage);
 
 		Assertions.assertEquals(4, taskManagerSecond.taskList().size());
+		taskStorage.deleteOnExit();
 	}
 
 	@Test
-	void shouldSaveAndLoadHistoryFromFile() {
-		File taskStorage = new File("./test/resources/storage.csv");
-		FileBackedTaskManager taskManager = new  FileBackedTaskManager("./test/resources/storage.csv");
+	void shouldSaveAndLoadHistoryFromFile() throws IOException {
+		File taskStorage = File.createTempFile("storageEmpty", ".csv");
+		FileBackedTaskManager taskManager = new  FileBackedTaskManager(taskStorage.getPath());
 
 
 		Task taskOne = new Task("First", "...", Status.NEW);
@@ -57,5 +61,6 @@ class FileBackedTaskManagerTest {
 		FileBackedTaskManager taskManagerSecond = FileBackedTaskManager.loadFromFile(taskStorage);
 
 		Assertions.assertEquals(2, taskManagerSecond.getHistory().size());
+		taskStorage.deleteOnExit();
 	}
 }
