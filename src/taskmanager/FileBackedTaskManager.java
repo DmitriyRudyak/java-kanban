@@ -76,13 +76,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
 	private void saveTasksToFile(BufferedWriter writer) throws IOException {	//вспомогательный метод для записи задач в файл
 		for (Task task : taskList()) {
-			writer.write(toString(task)+"\n");
+			writer.write(toString(task) + "\n");
 		}
 		for (Epic epic : epicList()) {
-			writer.write(toString(epic)+"\n");
+			writer.write(toString(epic) + "\n");
 		}
 		for (Subtask subtask : subtaskList()) {
-			writer.write(toString(subtask)+"\n");
+			writer.write(toString(subtask) + "\n");
 		}
 	}
 
