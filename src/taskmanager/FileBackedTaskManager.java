@@ -76,29 +76,26 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
 	private void saveTasksToFile(BufferedWriter writer) throws IOException {	//вспомогательный метод для записи задач в файл
 		for (Task task : taskList()) {
-			writer.write(toString(task) + "\n");
+			writer.write(toString(task));
 		}
 		for (Epic epic : epicList()) {
-			writer.write(toString(epic) + "\n");
+			writer.write(toString(epic));
 		}
 		for (Subtask subtask : subtaskList()) {
-			writer.write(toString(subtask) + "\n");
+			writer.write(toString(subtask));
 		}
 	}
 
 	private String toString(Task task) {	//метод для создания строки из Task
-		return task.getId() + "," + task.getTaskType() + "," + task.getName() + "," + task.getStatus() + "," +
-				task.getDescription();
+		return String.format("%s,%s,%s,%s,%s,\n", task.getId(), task.getTaskType(), task.getName(), task.getStatus(), task.getDescription());
 	}
 
 	private String toString(Epic epic) {	//метод для создания строки из Epic
-		return epic.getId() + "," + epic.getTaskType() + "," + epic.getName() + "," + epic.getStatus() + "," +
-				epic.getDescription();
+		return String.format("%s,%s,%s,%s,%s,\n", epic.getId(), epic.getTaskType(), epic.getName(), epic.getStatus(), epic.getDescription());
 	}
 
 	private String toString(Subtask subtask) {	//метод для создания строки из Subtask
-		return subtask.getId() + "," + subtask.getTaskType() + "," + subtask.getName() + "," + subtask.getStatus() + "," +
-				subtask.getDescription() + "," + subtask.getEpicID();
+		return String.format("%s,%s,%s,%s,%s,%s,\n", subtask.getId(), subtask.getTaskType(), subtask.getName(), subtask.getStatus(), subtask.getDescription(), subtask.getEpicID());
 	}
 
 	private static Task fromString(String value) {		//метод для сборки Task-ов из строк
