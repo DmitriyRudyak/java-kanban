@@ -3,6 +3,7 @@ import taskpackage.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -181,7 +182,7 @@ class InMemoryTaskManagerTest {
 	}
 
 	@Test
-	void historyNodeShouldBeDeletedFromBegining() {
+	void historyNodeShouldBeDeletedFromBeginning() {
 		TaskManager taskManager = Managers.getDefault();
 		Task taskOne = new Task("First", "...", Status.NEW);
 		Task taskTwo = new Task("Second", "...", Status.IN_PROGRESS);

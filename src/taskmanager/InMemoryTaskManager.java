@@ -6,11 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
-	private final HistoryManager historyManager = Managers.getDefaultHistory();
-	private final HashMap<Integer, Task> taskMap = new HashMap<>();
-	private final HashMap<Integer, Subtask> subtaskMap = new HashMap<>();
-	private final HashMap<Integer, Epic> epicMap = new HashMap<>();
-	private static int taskID = 0;
+	protected final HistoryManager historyManager = Managers.getDefaultHistory();
+	protected final HashMap<Integer, Task> taskMap = new HashMap<>();
+	protected final HashMap<Integer, Subtask> subtaskMap = new HashMap<>();
+	protected final HashMap<Integer, Epic> epicMap = new HashMap<>();
+	protected static int taskID = 0;
 
 	@Override
 	public Task addTask(Task task) {		//метод для создания базовых задач
@@ -22,7 +22,6 @@ public class InMemoryTaskManager implements TaskManager {
 	@Override
 	public ArrayList<Task> taskList() {				//метод для получения списка всех базовых задач
 		ArrayList<Task> taskList = new ArrayList<>(taskMap.values());
-		System.out.println("Список задач " + taskList);
 		return taskList;
 	}
 
@@ -62,7 +61,6 @@ public class InMemoryTaskManager implements TaskManager {
 	@Override
 	public ArrayList<Epic> epicList() {				//метод для получения списка всех Эпик задач
 		ArrayList<Epic> epicList = new ArrayList<>(epicMap.values());
-		System.out.println("Список эпиков " + epicList);
 		return epicList;
 	}
 
@@ -123,7 +121,6 @@ public class InMemoryTaskManager implements TaskManager {
 	@Override
 	public ArrayList<Subtask> subtaskList() {									//метод для получения общего списка подзадач
 		ArrayList<Subtask> subtaskList = new ArrayList<>(subtaskMap.values());
-		System.out.println("Список подзадач " + subtaskList);
 		return subtaskList;
 	}
 
