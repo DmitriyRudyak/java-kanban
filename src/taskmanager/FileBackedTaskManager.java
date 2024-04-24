@@ -28,7 +28,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 			writer.write("\n");
 			historyToString(writer);	//запись истории в файл
 		} catch (IOException e) {
-			throw new ManagerSaveException();
+			throw new ManagerSaveException("Непредвиденная ошибка");
 		}
 	}
 
@@ -69,7 +69,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 				fileManager.historyManager.add(fileHistory.get(id));
 			}
 		} catch (IOException e) {
-			throw new ManagerSaveException();
+			throw new ManagerSaveException("Непредвиденная ошибка");
 		}
 		return fileManager;
 	}
