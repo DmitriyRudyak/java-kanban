@@ -1,6 +1,8 @@
 package taskmanager;
 import taskpackage.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,8 +23,7 @@ public class InMemoryTaskManager implements TaskManager {
 
 	@Override
 	public ArrayList<Task> taskList() {				//метод для получения списка всех базовых задач
-		ArrayList<Task> taskList = new ArrayList<>(taskMap.values());
-		return taskList;
+		return new ArrayList<>(taskMap.values());
 	}
 
 	@Override
@@ -60,8 +61,7 @@ public class InMemoryTaskManager implements TaskManager {
 
 	@Override
 	public ArrayList<Epic> epicList() {				//метод для получения списка всех Эпик задач
-		ArrayList<Epic> epicList = new ArrayList<>(epicMap.values());
-		return epicList;
+		return new ArrayList<>(epicMap.values());
 	}
 
 	@Override
@@ -105,6 +105,10 @@ public class InMemoryTaskManager implements TaskManager {
 		Epic buffer = epicMap.get(subtask.getEpicID());
 		buffer.getSubTaskIDList().add(subtask.getId()); //запись subTask ID в Эпик
 		setEpicStatus(epicMap.get(subtask.getEpicID()));
+
+		if (subtask.getDuration() != null) {
+			setEpicClocks(epicMap.get(subtask.getEpicID()));
+		}
 		return subtask;
 	}
 
@@ -120,8 +124,7 @@ public class InMemoryTaskManager implements TaskManager {
 
 	@Override
 	public ArrayList<Subtask> subtaskList() {									//метод для получения общего списка подзадач
-		ArrayList<Subtask> subtaskList = new ArrayList<>(subtaskMap.values());
-		return subtaskList;
+		return new ArrayList<>(subtaskMap.values());
 	}
 
 	@Override
@@ -131,6 +134,10 @@ public class InMemoryTaskManager implements TaskManager {
 		historyManager.remove(subtask.getId());
 		subtaskMap.remove(subtask.getId());
 		setEpicStatus(epicMap.get(subtask.getEpicID()));
+
+		if (subtask.getDuration() != null) {
+			setEpicClocks(epicMap.get(subtask.getEpicID()));
+		}
 	}
 
 	@Override
@@ -143,6 +150,10 @@ public class InMemoryTaskManager implements TaskManager {
 	public Subtask updateSubtask(Subtask newSubtask) {	//метод для обновления подзадач в Эпике
 		subtaskMap.put(newSubtask.getId(), newSubtask);
 		setEpicStatus(epicMap.get(newSubtask.getEpicID()));
+
+		if (newSubtask.getDuration() != null) {
+			setEpicClocks(epicMap.get(newSubtask.getEpicID()));
+		}
 		return newSubtask;
 	}
 
@@ -155,16 +166,17 @@ public class InMemoryTaskManager implements TaskManager {
 		for (Epic epic : epicMap.values()) {
 			epic.getSubTaskIDList().clear();
 			setEpicStatus(epic);
+			setEpicClocks(epic);
 		}
 	}
 
 	@Override
-	public List<Task> getHistory() {
+	public List<Task> getHistory() {			//метод для получения истории получения тасков
 		return historyManager.getHistoryList();
 	}
 
 	@Override
-	public void setEpicStatus(Epic epic) {
+	public void setEpicStatus(Epic epic) {		//метод для расчета статуса эпика
 		int newTask = 0;
 		int inProgressTask = 0;
 		int doneTask = 0;
@@ -191,5 +203,108 @@ public class InMemoryTaskManager implements TaskManager {
 		} else {
 			epic.setStatus(Status.IN_PROGRESS);
 		}
+	}
+
+	@Override
+	public void setEpicClocks(Epic epic) {		//метод для расчета duration, startTime, endTime эпика
+		ArrayList<Subtask> subtasksFromEpic = new ArrayList<>();
+		for (Integer id : epic.getSubTaskIDList()) {
+			subtasksFromEpic.add(subtaskMap.get(id));
+		}
+
+		Duration allSubDuration = Duration.ofMinutes(0);
+		for (Subtask subtask : subtasksFromEpic) {
+			if (subtask.getDuration() != null) {
+				allSubDuration = allSubDuration.plus(subtask.getDuration());
+			}
+		}
+		epic.setDuration(allSubDuration);		//расчет duration эпика
+
+		LocalDateTime earliestStartTime = null;
+		for (Subtask subtask : subtasksFromEpic) {
+			if (earliestStartTime == null) {
+				earliestStartTime = subtask.getStartTime();
+			} else if (subtask.getStartTime().isBefore(earliestStartTime)) {
+				earliestStartTime = subtask.getStartTime();
+			}
+		}
+		epic.setStartTime(earliestStartTime);	//расчет startTime эпика
+
+		LocalDateTime lastStartTime = null;
+		Duration lastTaskDuration = Duration.ofMinutes(0);
+		for (Subtask subtask : subtasksFromEpic) {
+			if (lastStartTime == null) {
+				lastStartTime = subtask.getStartTime();
+				lastTaskDuration = subtask.getDuration();
+			} else if (subtask.getStartTime().isAfter(lastStartTime)) {
+				lastStartTime = subtask.getStartTime();
+				lastTaskDuration = subtask.getDuration();
+			}
+		}
+		epic.setEndTime(lastStartTime.plus(lastTaskDuration));			//расчет endTime эпика
+	}
+
+	public static void main(String[] args) {
+		TaskManager taskManager = Managers.getDefault();
+
+		Task taskOne = new Task("First", "...", Status.NEW);
+		Task taskTwo = new Task("Second", "...", Status.IN_PROGRESS);
+
+		Epic epic = new Epic("Epic");
+		Epic epicEmpty = new Epic("EpicEmpty");
+
+		Subtask subtaskOne = new Subtask("SubOne", "...",Status.NEW,2);
+		Subtask subtaskTwo = new Subtask("SubTwo", "...",Status.IN_PROGRESS,2);
+		Subtask subtaskThree = new Subtask("SubThree", "...",Status.DONE,2);
+
+		taskManager.addTask(taskOne);
+		taskManager.addTask(taskTwo);
+
+		taskManager.addEpic(epic);
+		taskManager.addEpic(epicEmpty);
+
+		taskManager.addSubtask(subtaskOne);
+		taskManager.addSubtask(subtaskTwo);
+		taskManager.addSubtask(subtaskThree);
+
+//        Тесты получения истории
+		taskManager.getTask(taskOne.getId());
+		taskManager.getTask(taskTwo.getId());
+		System.out.println(taskManager.getHistory());
+
+		taskManager.getTask(taskOne.getId());
+		System.out.println(taskManager.getHistory());
+
+		taskManager.getEpic(epic.getId());
+		taskManager.getTask(taskTwo.getId());
+		System.out.println(taskManager.getHistory());
+
+		taskManager.getSubtask(subtaskOne.getId());
+		taskManager.getSubtask(subtaskThree.getId());
+		System.out.println(taskManager.getHistory());
+
+		taskManager.removeTask(taskOne.getId());
+		System.out.println(taskManager.getHistory());
+
+		taskManager.removeSubtask(subtaskThree);
+		System.out.println(taskManager.getHistory());
+
+//        taskManager.removeEpic(epic.getId());
+//        System.out.println(taskManager.getHistory());
+
+		Task taskWithTime = new Task("Time", " ", Status.NEW, 30, "10.10.2020, 20:20");
+		Subtask subtaskWithTime = new Subtask("Time", " ", Status.NEW, 30, "10.10.2010, 20:20", epic.getId());
+		Subtask subtaskWithTime2 = new Subtask("Time2", " ", Status.NEW, 120, "10.10.2024, 20:20", epic.getId());
+		Subtask subtaskWithTime3 = new Subtask("Time3", " ", Status.NEW, 10, "10.10.2020, 20:20", epic.getId());
+
+		taskManager.addTask(taskWithTime);
+		taskManager.addSubtask(subtaskWithTime);
+		taskManager.addSubtask(subtaskWithTime2);
+		taskManager.addSubtask(subtaskWithTime3);
+
+		System.out.println(taskManager.getTask(taskWithTime.getId()));
+		System.out.println(taskManager.getSubtask(subtaskWithTime.getId()));
+		System.out.println(taskWithTime.getEndTime());
+		System.out.println(epic.getStartTime() + " " + epic.getEndTime() + " " + epic.getDuration());
 	}
 }

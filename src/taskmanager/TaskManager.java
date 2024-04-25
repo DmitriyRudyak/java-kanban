@@ -46,4 +46,6 @@ public interface TaskManager {
 	public List<Task> getHistory();
 
 	void setEpicStatus(Epic epic);
+
+	void setEpicClocks(Epic epic);
 }
