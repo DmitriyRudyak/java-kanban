@@ -315,5 +315,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 		System.out.println(managerNew.taskMap);
 		System.out.println(managerNew.subtaskMap);
 		System.out.println(managerNew.epicMap);
+		System.out.println(managerNew.getPrioritizedTasks());
 	}
 }

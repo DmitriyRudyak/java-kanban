@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Task {
+public class Task implements Comparable<Task> {
 	protected String name;
 	protected String description;
 	protected Status status;
@@ -95,6 +95,10 @@ public class Task {
 		return startTime.plus(duration);
 	}
 
+	public boolean hasClocks() {
+		return duration == null;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -145,5 +149,14 @@ public class Task {
 
 	public void setStartTime(LocalDateTime startTime) {
 		this.startTime = startTime;
+	}
+
+	@Override
+	public int compareTo(Task task) {
+		if (this.startTime.isBefore(task.startTime)) {
+			return -1;
+		} else if (this.startTime.isEqual(task.startTime)) {
+			return 0;
+		} else return 1;
 	}
 }
