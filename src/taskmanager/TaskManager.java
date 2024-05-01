@@ -36,7 +36,7 @@ public interface TaskManager {
 
 	ArrayList<Subtask> subtaskList();
 
-	void removeSubtask(Subtask subtask);
+	void removeSubtask(int id);
 
 	Subtask getSubtask(int id);
 

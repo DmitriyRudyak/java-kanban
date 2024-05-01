@@ -98,10 +98,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 	}
 
 	private String toString(Epic epic) {	//метод для создания строки из Epic
-//		if (epic.getDuration() != null) {
-//			return String.format("%s,%s,%s,%s,%s,%s,%s,%s\n", epic.getId(), epic.getTaskType(), epic.getName(),
-//					epic.getStatus(), epic.getDescription(), "", epic.getStartTime(), epic.getDuration().toMinutes());
-//		} else
 		return String.format("%s,%s,%s,%s,%s,\n", epic.getId(), epic.getTaskType(), epic.getName(),
 				epic.getStatus(), epic.getDescription());
 	}
@@ -132,7 +128,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 				if (duration > 0) return new Task(name, description, status, duration, startTime, id);
 				return new Task(name, description, status, id);
 			case EPIC:
-//				if (duration > 0) return new Epic(name, description, status, duration, startTime, id);
 				return new Epic(name, description, status, id);
 			case SUB_TASK:
 				int epicId = Integer.parseInt(taskValue[5]);
@@ -220,8 +215,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 	}
 
 	@Override
-	public void removeSubtask(Subtask subtask) {
-		super.removeSubtask(subtask);
+	public void removeSubtask(int id) {
+		super.removeSubtask(id);
 		save();
 	}
 
@@ -263,8 +258,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 		File taskStorage = new File("resources/taskStorage.csv");
 		FileBackedTaskManager manager = Managers.getDefaultFbManager();
 
-//		Task taskOne = new Task("First", "Description", Status.NEW);
-//		Task taskTwo = new Task("Second", "Description", Status.IN_PROGRESS);
+		Task taskOne = new Task("First", "Description", Status.NEW);
+		Task taskTwo = new Task("Second", "Description", Status.IN_PROGRESS);
 
 		Epic epic = new Epic("Epic");
 //		Epic epicEmpty = new Epic("EpicEmpty");
@@ -273,8 +268,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 //		Subtask subtaskTwo = new Subtask("SubTwo", "Description",Status.IN_PROGRESS,2);
 //		Subtask subtaskThree = new Subtask("SubThree", "Description",Status.DONE,3);
 
-//		manager.addTask(taskOne);
-//		manager.addTask(taskTwo);
+		manager.addTask(taskOne);
+		manager.addTask(taskTwo);
 //
 		manager.addEpic(epic);
 //		manager.addEpic(epicEmpty);

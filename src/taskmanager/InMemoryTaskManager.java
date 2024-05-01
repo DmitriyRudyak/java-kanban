@@ -148,16 +148,17 @@ public class InMemoryTaskManager implements TaskManager {
 	}
 
 	@Override
-	public void removeSubtask(Subtask subtask) {		//метод для удаления подзадач в Эпике
-		epicMap.get(subtask.getEpicID()).getSubTaskIDList().remove(Integer.valueOf(subtask.getId())); //удаление subtask ID из списка в эпике
+	public void removeSubtask(int id) {		//метод для удаления подзадач в Эпике
+		Epic epic = epicMap.get(subtaskMap.get(id).getEpicID());
+		epic.getSubTaskIDList().remove(Integer.valueOf(id)); //удаление subtask ID из списка в эпике
 
-		historyManager.remove(subtask.getId());
-		subtaskMap.remove(subtask.getId());
-		setEpicStatus(epicMap.get(subtask.getEpicID()));
+		historyManager.remove(id);
+		setEpicStatus(epic);
 
-		if (subtask.getDuration() != null) {
-			setEpicClocks(epicMap.get(subtask.getEpicID()));
+		if (subtaskMap.get(id).getDuration() != null) {
+			setEpicClocks(epic);
 		}
+		subtaskMap.remove(id);
 		prioritySet = getPrioritizedTasks();
 	}
 
@@ -240,34 +241,24 @@ public class InMemoryTaskManager implements TaskManager {
 				.collect(Collectors.toCollection(ArrayList::new));
 
 		Duration allSubDuration = Duration.ofMinutes(0);
-		for (Subtask subtask : subtasksFromEpic) {
-			allSubDuration = allSubDuration.plus(subtask.getDuration());
-		}
-		epic.setDuration(allSubDuration);		//расчет duration эпика
-
 		LocalDateTime earliestStartTime = null;
-		for (Subtask subtask : subtasksFromEpic) {
-			if (earliestStartTime == null) {
-				earliestStartTime = subtask.getStartTime();
-			} else if (subtask.getStartTime().isBefore(earliestStartTime)) {
-				earliestStartTime = subtask.getStartTime();
-			}
-		}
-		epic.setStartTime(earliestStartTime);	//расчет startTime эпика
-
 		LocalDateTime lastStartTime = null;
 		Duration lastTaskDuration = Duration.ofMinutes(0);
 		for (Subtask subtask : subtasksFromEpic) {
-			if (lastStartTime == null) {
-				lastStartTime = subtask.getStartTime();
-				lastTaskDuration = subtask.getDuration();
-			} else if (subtask.getStartTime().isAfter(lastStartTime)) {
+			allSubDuration = allSubDuration.plus(subtask.getDuration());
+			if (earliestStartTime == null || subtask.getStartTime().isBefore(earliestStartTime)) {
+				earliestStartTime = subtask.getStartTime();
+			}
+			if (lastStartTime == null || subtask.getStartTime().isAfter(lastStartTime)) {
 				lastStartTime = subtask.getStartTime();
 				lastTaskDuration = subtask.getDuration();
 			}
 		}
-		assert lastStartTime != null;
-		epic.setEndTime(lastStartTime.plus(lastTaskDuration));			//расчет endTime эпика
+		epic.setDuration(allSubDuration);		//расчет duration эпика
+		epic.setStartTime(earliestStartTime);	//расчет startTime эпика
+		if (lastStartTime != null) {
+			epic.setEndTime(lastStartTime.plus(lastTaskDuration));			//расчет endTime эпика
+		} else epic.setEndTime(null);
 	}
 
 	@Override
@@ -336,8 +327,9 @@ public class InMemoryTaskManager implements TaskManager {
 		taskManager.removeTask(taskOne.getId());
 		System.out.println(taskManager.getHistory());
 
-		taskManager.removeSubtask(subtaskThree);
+		taskManager.removeSubtask(subtaskThree.getId());
 		System.out.println(taskManager.getHistory());
+		System.out.println();
 
 		Task taskWithTime = new Task("Time", " ", Status.NEW, 90, "2024-10-10T20:20");
 		Task taskWithTime2 = new Task("Time2", " ", Status.NEW, 60, "2024-10-10T21:00");
@@ -366,6 +358,12 @@ public class InMemoryTaskManager implements TaskManager {
 		System.out.println(taskWithTime.getEndTime());
 		System.out.println(epic.getStartTime() + " " + epic.getEndTime() + " " + epic.getDuration());
 		System.out.println(taskManager.getPrioritizedTasks().size());
+		System.out.println(epic.getStartTime());
+		System.out.println(epic.getEndTime());
+		System.out.println(epic.getDuration());
+
+		System.out.println();
+		taskManager.deleteSubtaskList();
 		System.out.println(epic.getStartTime());
 		System.out.println(epic.getEndTime());
 		System.out.println(epic.getDuration());
