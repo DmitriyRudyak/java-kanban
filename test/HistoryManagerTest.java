@@ -3,7 +3,7 @@ import taskpackage.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class HistoryManagerTest extends TaskManagerTest<InMemoryTaskManager> {
+class HistoryManagerTest {
 	@Test
 	void taskInHistoryManagerIsUnchanged() {
 		TaskManager tskManager = Managers.getDefault();
