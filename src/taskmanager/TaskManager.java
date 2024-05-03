@@ -3,6 +3,7 @@ import taskpackage.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 public interface TaskManager {
 	Task addTask(Task task);
@@ -35,7 +36,7 @@ public interface TaskManager {
 
 	ArrayList<Subtask> subtaskList();
 
-	void removeSubtask(Subtask subtask);
+	void removeSubtask(int id);
 
 	Subtask getSubtask(int id);
 
@@ -43,7 +44,13 @@ public interface TaskManager {
 
 	void deleteSubtaskList();
 
-	public List<Task> getHistory();
+	List<Task> getHistory();
 
 	void setEpicStatus(Epic epic);
+
+	void setEpicClocks(Epic epic);
+
+	TreeSet<Task> getPrioritizedTasks();
+
+	boolean checkTaskCrossing(Task task);
 }

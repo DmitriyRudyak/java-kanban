@@ -1,3 +1,4 @@
+import exceptions.ManagerSaveException;
 import taskmanager.*;
 import taskpackage.*;
 import org.junit.jupiter.api.Assertions;
@@ -5,8 +6,11 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
-class FileBackedTaskManagerTest {
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
 	@Test
 	void shouldSaveAndLoadEmptyFile() throws IOException {
 		File taskStorage = File.createTempFile("data", ".csv");
@@ -66,6 +70,40 @@ class FileBackedTaskManagerTest {
 		FileBackedTaskManager taskManagerSecond = FileBackedTaskManager.loadFromFile(taskStorage);
 
 		Assertions.assertEquals(2, taskManagerSecond.getHistory().size());
+		taskStorage.deleteOnExit();
+	}
+
+	@Test
+	void shouldSaveAndLoadTaskClocksFromFile() throws IOException {
+		File taskStorage = File.createTempFile("data", ".csv");
+		FileBackedTaskManager taskManager = new  FileBackedTaskManager(taskStorage.getPath());
+
+
+		Task taskOne = new Task("First", "...", Status.NEW, 30, "2010-10-10T20:20");
+		taskManager.addTask(taskOne);
+
+		System.out.println(taskStorage.getPath());
+		FileBackedTaskManager taskManagerSecond = FileBackedTaskManager.loadFromFile(taskStorage);
+
+		LocalDateTime timeFromFile = taskManagerSecond.getTask(taskOne.getId()).getStartTime();
+		Assertions.assertEquals(timeFromFile, taskOne.getStartTime());
+		taskStorage.deleteOnExit();
+	}
+
+	@Test
+	void testException() throws IOException {
+		File taskStorage = File.createTempFile("data", ".csv");
+		FileBackedTaskManager taskManager = new  FileBackedTaskManager(taskStorage.getPath());
+
+		Task taskOne = new Task("First", "...", Status.NEW, 30, "2010-10-10T20:20");
+		taskManager.addTask(taskOne);
+
+		System.out.println(taskStorage.getPath());
+		assertThrows(ManagerSaveException.class, () -> {
+			FileBackedTaskManager taskManagerSecond = FileBackedTaskManager.loadFromFile(new File("load"));
+			LocalDateTime timeFromFile = taskManagerSecond.getTask(taskOne.getId()).getStartTime();
+		});
+
 		taskStorage.deleteOnExit();
 	}
 }

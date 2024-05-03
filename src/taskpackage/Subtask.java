@@ -18,15 +18,37 @@ public class Subtask extends Task {
 		this.epicID = epicID;
 	}
 
+	public Subtask(String name, String description, Status status, int duration, String startTime, int epicID) {
+		super(name, description, status, duration, startTime);
+		this.epicID = epicID;
+	}
+
+	public Subtask(String name, String description, Status status, int duration, String startTime, int epicID, int id) {
+		super(name, description, status, duration, startTime, id);
+		this.epicID = epicID;
+	}
+
 	@Override
 	public String toString() {
-		return "Subtask{" +
-				"epicID=" + epicID +
-				", name='" + name + '\'' +
-				", description='" + description + '\'' +
-				", status=" + status +
-				", ID=" + id +
-				'}';
+		if (duration == null) {
+			return "Subtask{" +
+					"epicID=" + epicID +
+					", name='" + name + '\'' +
+					", description='" + description + '\'' +
+					", status=" + status +
+					", ID=" + id +
+					'}';
+		} else {
+			return "Subtask{" +
+					"epicID=" + epicID +
+					", name='" + name + '\'' +
+					", description='" + description + '\'' +
+					", status=" + status +
+					", id=" + id +
+					", duration=" + duration.toMinutes() +
+					", startTime=" + startTime +
+					'}';
+		}
 	}
 
 	public int getEpicID() {

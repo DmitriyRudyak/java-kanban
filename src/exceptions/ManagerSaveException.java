@@ -1,6 +1,9 @@
 package exceptions;
 
 public class ManagerSaveException extends RuntimeException {
-	public ManagerSaveException() {
+	private final String error;
+
+	public ManagerSaveException(String error) {
+		this.error = error;
 	}
 }
