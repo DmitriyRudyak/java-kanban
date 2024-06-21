@@ -195,7 +195,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 	}
 
 	@Override
-	public Task updateEpic(Epic newEpic) {
+	public Epic updateEpic(Epic newEpic) {
 		super.updateEpic(newEpic);
 		save();
 		return newEpic;
@@ -241,7 +241,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 	}
 
 	@Override
-	public Task getEpic(int id) {
+	public Epic getEpic(int id) {
 		super.getEpic(id);
 		save();
 		return epicMap.get(id);
