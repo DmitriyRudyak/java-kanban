@@ -1,22 +1,11 @@
 package server.handlers;
 
 import com.sun.net.httpserver.HttpExchange;
-import server.Endpoint;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class BaseHttpHandler {
-
-	protected Endpoint getEndpoint(String method) {
-		switch (method) {
-			case "GET" : return Endpoint.GET;
-			case "POST" : return Endpoint.POST;
-			case "DELETE" : return Endpoint.DELETE;
-			default : return Endpoint.UNKNOWN;
-		}
-	}
-
 	protected void sendSuccess(HttpExchange httpExchange, String text) throws IOException {
 		byte[] response = text.getBytes(StandardCharsets.UTF_8);
 		httpExchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
@@ -44,6 +33,15 @@ public class BaseHttpHandler {
 		byte[] response = text.getBytes(StandardCharsets.UTF_8);
 		httpExchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
 		httpExchange.sendResponseHeaders(406, response.length);
+		httpExchange.getResponseBody().write(response);
+		httpExchange.close();
+	}
+
+	protected void sendServerError(HttpExchange httpExchange) throws IOException {
+		String text = "Произошла непредвиденная ошибка сервера";
+		byte[] response = text.getBytes(StandardCharsets.UTF_8);
+		httpExchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
+		httpExchange.sendResponseHeaders(500, response.length);
 		httpExchange.getResponseBody().write(response);
 		httpExchange.close();
 	}

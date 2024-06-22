@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpServer;
 import server.adapters.*;
 import server.handlers.*;
+import server.tokens.TasksListTypeToken;
 import taskmanager.*;
 import taskpackage.Status;
 import taskpackage.Task;
@@ -17,16 +18,18 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class HttpTaskServer {
-	static final int PORT = 8080;
+	public static final int PORT = 8080;
 	private final HttpServer httpServer;
 	private final TaskManager taskManager;
 	private final Gson gson = new GsonBuilder()
 		.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
 		.registerTypeAdapter(Duration.class, new DurationAdapter())
 		.create();
-
+	private final String start = String.format("HTTP-сервер запущен на %s порту", PORT);
+	private final String stop = String.format("HTTP-сервер на %s порту остановлен", PORT);
 
 	public HttpTaskServer(TaskManager manager) throws IOException {
 		this.httpServer = HttpServer.create(new InetSocketAddress(PORT), 0);
@@ -44,12 +47,12 @@ public class HttpTaskServer {
 		httpServer.createContext("/history", new HistoryHandler(taskManager, gson));
 		httpServer.createContext("/prioritized", new PrioritizedHandler(taskManager, gson));
 		httpServer.start();
-		System.out.println("HTTP-сервер запущен на " + PORT + " порту");
+		System.out.println(start);
 	}
 
 	public void stop() {
-		System.out.println("HTTP-сервер на " + PORT + " порту остановлен");
 		httpServer.stop(0);
+		System.out.println(stop);
 	}
 
 	public static void main(String[] args) throws IOException, InterruptedException {
@@ -63,36 +66,26 @@ public class HttpTaskServer {
 
 		server.start();
 
-		Task taskWithTime = new Task("Time", " ", Status.NEW, 90, "2024-10-10T20:20");
-		manager.addTask(taskWithTime);
-
-		Task taskWithTime2 = new Task("Time2", " ", Status.NEW, 90, "2024-10-10T20:20");
-
-		String taskJson = gson1.toJson(taskWithTime2);
+		Task task = new Task("Task", "Task", Status.NEW, 90, "2024-10-10T20:20");
+		Task task1 = new Task("Task1", "Task1", Status.NEW, 90, "2023-10-10T20:20");
+		Task task2 = new Task("Task2", "Task2", Status.NEW, 90, "2022-10-10T20:20");
+		manager.addTask(task);
+		manager.addTask(task1);
+		manager.addTask(task2);
 
 		HttpClient client = HttpClient.newHttpClient();
-		URI url = URI.create("http://localhost:8080/tasks/1");
+		URI uri = URI.create("http://localhost:8080/tasks");
 		HttpRequest request = HttpRequest.newBuilder()
-				.uri(url)
-				.POST(HttpRequest.BodyPublishers.ofString(taskJson))
+				.uri(uri)
+				.GET()
 				.build();
 
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+		List<Task> taskListFromResponse = gson1.fromJson(response.body(), new TasksListTypeToken().getType());
+
+		System.out.println("taskListFromResponse = " + taskListFromResponse);
 		System.out.println(response.statusCode());
-		System.out.println(manager.getTask(1));
-
-		Task taskWithTime3 = new Task("Time3", " ", Status.NEW, 90, "2024-10-10T20:20");
-
-		taskJson = gson1.toJson(taskWithTime3);
-		url = URI.create("http://localhost:8080/tasks/1");
-		request = HttpRequest.newBuilder()
-				.uri(url)
-				.POST(HttpRequest.BodyPublishers.ofString(taskJson))
-				.build();
-
-		response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		System.out.println(response.statusCode());
-		System.out.println(manager.getTask(1));
 
 		server.stop();
 	}

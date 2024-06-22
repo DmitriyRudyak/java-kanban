@@ -11,6 +11,8 @@ import taskmanager.*;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
+import static server.Endpoint.getEndpoint;
+
 public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
 	private final TaskManager manager;
 	private final Gson gson;
@@ -40,6 +42,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
 	}
 
 	public void handleGet(HttpExchange exchange) throws IOException {
+		try {
 		String[] path = exchange.getRequestURI().getPath().split("/");
 		if (path.length < 3) {
 			System.out.println("Обработка запроса " + exchange.getRequestMethod() + " /" + path[1]);
@@ -64,9 +67,14 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
 				sendNoTaskError(exchange, "Эпик с ID: " + path[2] + " отсутствует.");
 			}
 		}
+		} catch (Exception e) {
+			e.printStackTrace();
+			sendServerError(exchange);
+		}
 	}
 
 	public void handlePost(HttpExchange exchange) throws IOException {
+		try {
 		String[] path = exchange.getRequestURI().getPath().split("/");
 		String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
 		Epic epic = gson.fromJson(body, Epic.class);
@@ -88,9 +96,14 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
 				sendNoTaskError(exchange, "Эпик с ID: " + path[2] + " отсутствует.");
 			}
 		}
+		} catch (Exception e) {
+			e.printStackTrace();
+			sendServerError(exchange);
+		}
 	}
 
 	public void handleDelete(HttpExchange exchange) throws IOException {
+		try {
 		String[] path = exchange.getRequestURI().getPath().split("/");
 		System.out.println("Обработка запроса " + exchange.getRequestMethod() + " /" + path[1] + "/" + path[2]);
 		try {
@@ -98,6 +111,10 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
 			sendSuccess(exchange, "Эпик удален.");
 		} catch (TaskNotFoundException nullException) {
 			sendNoTaskError(exchange, "Эпик с ID: " + path[2] + " отсутствует.");
+		}
+		} catch (Exception e) {
+			e.printStackTrace();
+			sendServerError(exchange);
 		}
 	}
 }
