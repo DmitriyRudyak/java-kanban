@@ -63,7 +63,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
 				sendNoTaskError(exchange, "Подзадача с ID: " + path[2] + " отсутствует.");
 			}
 		}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 			sendServerError(exchange);
 		}
@@ -95,7 +95,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
 				sendNoTaskError(exchange, "Подзадача с ID: " + path[2] + " отсутствует.");
 			}
 		}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 			sendServerError(exchange);
 		}
@@ -111,7 +111,7 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
 		} catch (TaskNotFoundException nullException) {
 			sendNoTaskError(exchange, "Подзадача с ID: " + path[2] + " отсутствует.");
 		}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 			sendServerError(exchange);
 		}

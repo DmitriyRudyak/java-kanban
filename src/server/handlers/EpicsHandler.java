@@ -67,7 +67,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
 				sendNoTaskError(exchange, "Эпик с ID: " + path[2] + " отсутствует.");
 			}
 		}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 			sendServerError(exchange);
 		}
@@ -96,7 +96,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
 				sendNoTaskError(exchange, "Эпик с ID: " + path[2] + " отсутствует.");
 			}
 		}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 			sendServerError(exchange);
 		}
@@ -112,7 +112,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
 		} catch (TaskNotFoundException nullException) {
 			sendNoTaskError(exchange, "Эпик с ID: " + path[2] + " отсутствует.");
 		}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 			sendServerError(exchange);
 		}

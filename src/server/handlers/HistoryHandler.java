@@ -31,7 +31,7 @@ public class HistoryHandler extends BaseHttpHandler implements HttpHandler {
 		} else {
 			sendNoTaskError(exchange, "Неверный запрос.");
 		}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 			sendServerError(exchange);
 		}

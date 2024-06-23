@@ -61,7 +61,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
 					sendNoTaskError(exchange, "Задача с ID: " + path[2] + " отсутствует.");
 				}
 			}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 			sendServerError(exchange);
 		}
@@ -94,7 +94,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
 				sendNoTaskError(exchange, "Задача с ID: " + path[2] + " отсутствует.");
 			}
 		}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 			sendServerError(exchange);
 		}
@@ -110,7 +110,7 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
 		} catch (TaskNotFoundException nullException) {
 			sendNoTaskError(exchange, "Задача с ID: " + path[2] + " отсутствует.");
 		}
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 			sendServerError(exchange);
 		}
