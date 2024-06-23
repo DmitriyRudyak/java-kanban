@@ -1,10 +1,10 @@
+import exceptions.TimeCrossingException;
 import taskmanager.*;
 import taskpackage.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 	@Test
@@ -61,7 +61,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 		Task taskWithTime2 = new Task("Time2", " ", Status.NEW, 60, "2024-10-10T21:00");
 		Task taskWithTime3 = new Task("Time3", " ", Status.NEW, 300, "2024-10-10T23:20");
 		taskManager.addTask(taskWithTime);
-		taskManager.addTask(taskWithTime2);
+		assertThrows(TimeCrossingException.class, () -> taskManager.addTask(taskWithTime2));
 		taskManager.addTask(taskWithTime3);
 
 		Assertions.assertEquals(2, taskManager.getPrioritizedTasks().size());

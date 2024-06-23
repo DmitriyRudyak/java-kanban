@@ -1,4 +1,5 @@
 package taskmanager;
+import exceptions.TimeCrossingException;
 import taskpackage.*;
 
 import java.time.Duration;
@@ -24,7 +25,7 @@ public class InMemoryTaskManager implements TaskManager {
 			taskMap.put(task.getId(), task);
 			prioritySet = getPrioritizedTasks();
 		} else {
-			System.out.println("Выберите другое время для " + task);
+			throw new TimeCrossingException("Выберите другое время для " + task);
 		}
 		return task;
 	}
@@ -53,7 +54,7 @@ public class InMemoryTaskManager implements TaskManager {
 			taskMap.put(newTask.getId(), newTask);
 			prioritySet = getPrioritizedTasks();
 		} else {
-			System.out.println("Выберите другое время для " + newTask);
+			throw new TimeCrossingException("Выберите другое время для " + newTask);
 		}
 		return newTask;
 	}
@@ -91,13 +92,13 @@ public class InMemoryTaskManager implements TaskManager {
 	}
 
 	@Override
-	public Task getEpic(int id) {			//метод для получения Эпик задач по идентификатору
+	public Epic getEpic(int id) {			//метод для получения Эпик задач по идентификатору
 		historyManager.add(epicMap.get(id));
 		return epicMap.get(id);
 	}
 
 	@Override
-	public Task updateEpic(Epic newEpic) {	//метод для обновления Эпик задач
+	public Epic updateEpic(Epic newEpic) {	//метод для обновления Эпик задач
 		epicMap.put(newEpic.getId(), newEpic);
 		return newEpic;
 	}
@@ -129,15 +130,15 @@ public class InMemoryTaskManager implements TaskManager {
 			}
 			prioritySet = getPrioritizedTasks();
 		} else {
-			System.out.println("Выберите другое время для " + subtask);
+			throw new TimeCrossingException("Выберите другое время для " + subtask);
 		}
 		return subtask;
 	}
 
 	@Override
-	public ArrayList<Subtask> subtaskList(Epic epic) {						//метод для получения списка подзадач в определенном Эпике
-		System.out.println("Список подзадач в " + epic.getName());
-		return epic.getSubTaskIDList().stream()
+	public ArrayList<Subtask> subtaskList(int id) {						//метод для получения списка подзадач в определенном Эпике
+		System.out.println("Список подзадач в " + epicMap.get(id).getName());
+		return epicMap.get(id).getSubTaskIDList().stream()
 				.map(subtaskMap::get)
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
@@ -179,7 +180,7 @@ public class InMemoryTaskManager implements TaskManager {
 			}
 			prioritySet = getPrioritizedTasks();
 		} else {
-			System.out.println("Выберите другое время для " + newSubtask);
+			throw new TimeCrossingException("Выберите другое время для " + newSubtask);
 		}
 		return newSubtask;
 	}
@@ -332,26 +333,26 @@ public class InMemoryTaskManager implements TaskManager {
 		System.out.println();
 
 		Task taskWithTime = new Task("Time", " ", Status.NEW, 90, "2024-10-10T20:20");
-		Task taskWithTime2 = new Task("Time2", " ", Status.NEW, 60, "2024-10-10T21:00");
-		Task taskWithTime3 = new Task("Time3", " ", Status.NEW, 300, "2024-10-10T23:20");
+//		Task taskWithTime2 = new Task("Time2", " ", Status.NEW, 60, "2024-10-10T21:00");
+//		Task taskWithTime3 = new Task("Time3", " ", Status.NEW, 300, "2024-10-10T23:20");
 		Task taskThree = new Task("Third", "...", Status.NEW);
 		Subtask subtaskWithTime = new Subtask("SubTime", " ", Status.NEW, 30, "2022-10-10T20:20", epic.getId());
 		Subtask subtaskWithTime2 = new Subtask("SubTime2", " ", Status.NEW, 120, "2010-10-10T20:20", epic.getId());
 		Subtask subtaskWithTime3 = new Subtask("SubTime3", " ", Status.NEW, 500, "2030-10-10T20:20", epic.getId());
 
-		Task taskWithTime4 = new Task("Time4", " ", Status.NEW, 30, "2024-10-10T23:30");
-		Subtask subtaskWithTime4 = new Subtask("SubTime4", " ", Status.NEW, 10, "2030-10-10T20:40", epic.getId());
+//		Task taskWithTime4 = new Task("Time4", " ", Status.NEW, 30, "2024-10-10T23:30");
+//		Subtask subtaskWithTime4 = new Subtask("SubTime4", " ", Status.NEW, 10, "2030-10-10T20:40", epic.getId());
 
 		taskManager.addTask(taskWithTime);
-		taskManager.addTask(taskWithTime2);
-		taskManager.addTask(taskWithTime3);
+//		taskManager.addTask(taskWithTime2);
+//		taskManager.addTask(taskWithTime3);
 		taskManager.addTask(taskThree);
 		taskManager.addSubtask(subtaskWithTime);
 		taskManager.addSubtask(subtaskWithTime2);
 		taskManager.addSubtask(subtaskWithTime3);
 
-		taskManager.addTask(taskWithTime4);
-		taskManager.addSubtask(subtaskWithTime4);
+//		taskManager.addTask(taskWithTime4);
+//		taskManager.addSubtask(subtaskWithTime4);
 
 		System.out.println(taskManager.getTask(taskWithTime.getId()));
 		System.out.println(taskManager.getSubtask(subtaskWithTime.getId()));
