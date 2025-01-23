@@ -1,10 +1,13 @@
-id,type,name,status,description,epic
-0,TASK,First,NEW,Description
-1,TASK,Second,IN_PROGRESS,Description
-2,EPIC,Epic,IN_PROGRESS,null
-3,EPIC,EpicEmpty,DONE,null
-4,SUB_TASK,SubOne,NEW,Description,2
-5,SUB_TASK,SubTwo,IN_PROGRESS,Description,2
-6,SUB_TASK,SubThree,DONE,Description,3
+id,type,name,status,description,epic,startTime,duration
+1,TASK,First,NEW,Description
+2,TASK,Second,IN_PROGRESS,Description
+6,TASK,Time,NEW,TimeD,NoEpic,2020-10-10T20:20,30
+7,TASK,Time2,NEW,TimeD,NoEpic,2022-10-10T20:20,320
+0,EPIC,Epic,IN_PROGRESS,Epic
+3,SUB_TASK,SubOne,NEW,Description,0
+4,SUB_TASK,SubTwo,IN_PROGRESS,Description,0
+5,SUB_TASK,SubThree,DONE,Description,0
+8,SUB_TASK,Time,NEW,TimeD,0,2010-10-10T20:20,30
+9,SUB_TASK,Time2,NEW,TimeD,0,2020-10-10T20:20,120
+10,SUB_TASK,Time3,NEW,TimeD,0,2030-10-10T20:20,10
 
-0,1
